@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+    <meta charset="UTF-8" />
+    <meta content="width=device-width,initial-scale=1" name="viewport" />
+    <title>Hangman Game</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 20px;
+        }
+        #hangman {
+            font-family: monospace;
+            white-space: pre;
+            text-align: left;
+            margin: 20px calc(50% - 50px);
+        }
+        #message {
+            margin: 10px 0;
+            color: green;
+        }
+        input {
+            margin: 10px 5px;
+        }
+    </style>
+    <h1>Hangman Game</h1>
+    <p>Guess the word before the hangman is fully drawn!</p>
+    <div id="hangman"></div>
+    <div id="word-display"></div>
+    <input id="guess" maxlength="1" placeholder="Enter a letter" />
+    <button id="submit-guess">Submit Guess</button>
+    <div id="message"></div>
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const n = ["apple", "banana", "cherry", "pineapple", "elderberry", "fig", "grape", "kiwi", "lemon"];
+            let e = n[Math.floor(Math.random() * n.length)],
+                t = [],
+                _ = 0;
+            const d = document.getElementById("word-display"),
+                o = document.getElementById("message"),
+                s = document.getElementById("hangman"),
+                l = document.getElementById("guess"),
+                a = document.getElementById("submit-guess");
+            function i() {
+                d.textContent = [...e].map((n) => (t.includes(n) ? n : "_")).join(" ");
+            }
+            function u() {
+                s.textContent = [
+                    "  ____\n |    |\n |\n |\n |\n |\n_|___",
+                    "  ____\n |    |\n |    O\n |\n |\n |\n_|___",
+                    "  ____\n |    |\n |    O\n |    |\n |\n |\n_|___",
+                    "  ____\n |    |\n |    O\n |   /|\n |\n |\n_|___",
+                    "  ____\n |    |\n |    O\n |   /|\\\n |\n |\n_|___",
+                    "  ____\n |    |\n |    O\n |   /|\\\n |   /\n |\n_|___",
+                    "  ____\n |    |\n |    O\n |   /|\\\n |   / \\\n |\n_|___",
+                ][_];
+            }
+            a.addEventListener("click", function () {
+                const n = l.value.toLowerCase();
+                if (((l.value = ""), 1 === n.length && /[a-z]/.test(n)))
+                    if (t.includes(n)) o.textContent = "You already guessed that letter.";
+                    else {
+                        if ((t.push(n), e.includes(n))) o.textContent = "Good guess!";
+                        else if (((o.textContent = "Wrong guess!"), _++, _ >= 6)) return u(), (o.textContent = "Game over! The word was: " + e), (l.disabled = !0), void (a.disabled = !0);
+                        i(), u(), e.split("").every((n) => t.includes(n)) && ((o.textContent = "Congratulations! You guessed the word: " + e), (l.disabled = !0), (a.disabled = !0));
+                    }
+                else o.textContent = "Please enter a single valid letter.";
+            }),
+                i(),
+                u();
+        });
+    </script>
+</html>
